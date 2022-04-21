@@ -6,6 +6,7 @@ interface ServerData {
   _id: string;
   name: string;
   defaultChannel: string;
+  hexColor: string;
 }
 
 export class Server {
@@ -16,10 +17,13 @@ export class Server {
 
   defaultChannel: string;
 
+  hexColor: string;
+
   constructor(data: ServerData) {
     makeAutoObservable(this, {_id: false});
     this._id = data._id;
     this.name = data.name;
+    this.hexColor = data.hexColor;
     this.defaultChannel = data.defaultChannel;
   }
 }
@@ -28,15 +32,19 @@ export class Servers {
 
   client: Client;
 
-  servers: Record<string, Server> = {};
+  cache: Record<string, Server> = {};
 
   addServer(data: ServerData) {
     const server = new Server(data);
-    this.servers[server._id] = server;
+    this.cache[server._id] = server;
   }
 
   constructor(client: Client) {
     this.client = client;
     makeAutoObservable(this, { client: false });
+  }
+
+  get array() {
+    return Object.values(this.cache);
   }
 }
