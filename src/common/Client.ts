@@ -1,4 +1,5 @@
 import { SocketManager } from '../socket/SocketManager';
+import { Channels } from '../store/Channels';
 import { Servers } from '../store/Servers';
 
 export class Client {
@@ -9,10 +10,13 @@ export class Client {
 
   servers: Servers;
 
+  channels: Channels;
+
   constructor() {
     this.token = null;
     this.socketManager = new SocketManager(this);
     this.servers = new Servers(this);
+    this.channels = new Channels(this);
   }
   
   public login(token: string) {

@@ -11,6 +11,8 @@ interface ServerData {
 
 export class Server {
 
+  client: Client;
+
   _id: string;
 
   name: string;
@@ -19,12 +21,17 @@ export class Server {
 
   hexColor: string;
 
-  constructor(data: ServerData) {
-    makeAutoObservable(this, {_id: false});
+  constructor(client: Client, data: ServerData) {
+    this.client = client;
     this._id = data._id;
+    makeAutoObservable(this, {_id: false, client: false});
     this.name = data.name;
     this.hexColor = data.hexColor;
     this.defaultChannel = data.defaultChannel;
+  }
+
+  get channels() {
+    return this.client.channels.array.filter(channel => channel.server === this._id);
   }
 }
 
@@ -35,7 +42,7 @@ export class Servers {
   cache: Record<string, Server> = {};
 
   addServer(data: ServerData) {
-    const server = new Server(data);
+    const server = new Server(this.client, data);
     this.cache[server._id] = server;
   }
 

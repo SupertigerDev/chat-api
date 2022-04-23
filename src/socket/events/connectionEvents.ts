@@ -16,5 +16,10 @@ export function onAuthenticated(client: Client, payload: AuthenticatedPayload) {
     client.servers.addServer(server);
   }
 
+  for (let i = 0; i < payload.channels.length; i++) {
+    const channel = payload.channels[i];
+    client.channels.addChannel(channel);
+  }
+
   
 }

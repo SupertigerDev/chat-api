@@ -2,7 +2,7 @@ export interface AuthenticatedPayload {
   user: SelfUser;
   servers: Server[];
   serverMembers: ServerMember[];
-  serverChannels: ServerChannel[];
+  channels: Channel[];
 }
 
 interface SelfUser {
@@ -36,10 +36,11 @@ interface ServerMember {
   joinedAt: number;
 }
 
-interface ServerChannel {
+interface Channel {
+  name: string
   _id: string;
   createdBy: string;
-  server: string;
-  name: string
+  server?: string;
+  type: number;
   createdAt: number
 }
