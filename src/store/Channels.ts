@@ -14,6 +14,13 @@ interface ChannelData {
   type: number;
 }
 
+interface SendMessageOpts {
+  emitToSelf?: boolean;
+}
+const defaultSendMessageOpts: SendMessageOpts = {
+  emitToSelf: true,
+};
+
 
 export class ServerChannel {
   _id: string;
@@ -31,6 +38,10 @@ export class ServerChannel {
     this.name = data.name;
     this.type = data.type;
     this.server = data.server;
+  }
+  sendMessage(content: string, opts: SendMessageOpts) {
+    const options = { ...defaultSendMessageOpts, ...opts };
+    
   }
 }
 
