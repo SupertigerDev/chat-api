@@ -1,5 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { Client } from '../common/Client';
+import { Message } from '../common/Message';
+import { fetchMessages, postMessage } from '../services/messages';
 
 export enum ChannelType {
   DM_TEXT = 0,
@@ -18,11 +20,13 @@ interface SendMessageOpts {
   emitToSelf?: boolean;
 }
 const defaultSendMessageOpts: SendMessageOpts = {
-  emitToSelf: true,
+  emitToSelf: false,
 };
 
 
 export class ServerChannel {
+  client: Client;
+
   _id: string;
 
   type: ChannelType;
@@ -31,17 +35,28 @@ export class ServerChannel {
 
   server: string;
 
-  constructor(data: ChannelData) {
+  constructor(client: Client, data: ChannelData) {
     if (!data.server) throw new Error('ServerChannel must have a server.');
     this._id = data._id;
-    makeAutoObservable(this, {_id: false});
+    this.client = client;
+    makeAutoObservable(this, {_id: false, client: false});
     this.name = data.name;
     this.type = data.type;
     this.server = data.server;
   }
-  sendMessage(content: string, opts: SendMessageOpts) {
+  async sendMessage(content: string, opts?: SendMessageOpts) {
     const options = { ...defaultSendMessageOpts, ...opts };
+    const rawMessage = await postMessage(this.client, {
+      content: content,
+      channelId: this._id,
+      ...(!options.emitToSelf ? { socketId: this.client.socketManager.socket.id } : {}),
+    });
+    return new Message(rawMessage);
     
+  }
+  async getMessages() {
+    const rawMessages = await fetchMessages(this.client, this._id);
+    return rawMessages.map(rawMessage => new Message(rawMessage));
   }
 }
 
@@ -54,7 +69,7 @@ export class Channels {
 
   addChannel(data: ChannelData) {
     if (data.type === ChannelType.SERVER_TEXT) {
-      const channel = new ServerChannel(data);
+      const channel = new ServerChannel(this.client, data);
       this.cache[channel._id] = channel;
     }
   }

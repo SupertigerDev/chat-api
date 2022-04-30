@@ -1,20 +1,31 @@
 import { makeAutoObservable } from 'mobx';
-import { Client } from '../common/Client';
 
 
 interface MessageData {
   _id: string;
   channel: string;
   content?: string;
+  createdBy: {
+    _id: string;
+    username: string;
+    tag: string;
+    hexColor: string;
+  }
   createdAt: number;
   editedAt?: number;
 }
 
-class Message {
+export class Message {
   _id: string;
   channel: string;
   content?: string;
   createdAt: number;
+  createdBy: {
+    _id: string;
+    username: string;
+    tag: string;
+    hexColor: string;
+  };
   editedAt?: number;
 
   constructor(data: MessageData) {
@@ -24,21 +35,8 @@ class Message {
     this.content = data.content;
     this.createdAt = data.createdAt;
     this.editedAt = data.editedAt;
+    this.createdBy = data.createdBy;
   }
   
 
-}
-
-
-export class Messages {
-  client: Client;
-  cache: Record<string, Message> = {};
-  constructor(client: Client) {
-    this.client = client;
-    makeAutoObservable(this, { client: false });
-  }
-  addMessage(data: MessageData) {
-    const message = new Message(data);
-    this.cache[message._id] = message;
-  }
 }
