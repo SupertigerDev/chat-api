@@ -13,6 +13,7 @@ interface Message {
     tag: string;
     hexColor: string;
   };
+  type: number;
   createdAt: number;
   editedAt?: number;
 }
