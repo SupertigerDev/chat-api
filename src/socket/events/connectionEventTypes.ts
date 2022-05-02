@@ -8,6 +8,7 @@ export interface AuthenticatedPayload {
 interface SelfUser {
   _id: string;
   username: string;
+  hexColor: string;
   avatar?: string;
   tag: string;
 }

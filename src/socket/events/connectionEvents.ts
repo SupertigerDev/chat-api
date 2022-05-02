@@ -1,5 +1,7 @@
 import { Socket } from 'socket.io-client';
 import { Client } from '../../common/Client';
+import { Message } from '../../common/Message';
+import { User } from '../../store/User';
 import { AUTHENTICATE } from '../ClientEventNames';
 import { AuthenticatedPayload } from './connectionEventTypes';
 
@@ -19,7 +21,7 @@ export function onAuthenticated(client: Client, payload: AuthenticatedPayload) {
   for (let i = 0; i < payload.channels.length; i++) {
     const channel = payload.channels[i];
     client.channels.addChannel(channel);
-  }
+  }  
 
-  
+  client.account.user = new User(client, payload.user);
 }
