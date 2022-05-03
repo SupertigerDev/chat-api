@@ -51,12 +51,12 @@ export class ServerChannel {
       channelId: this._id,
       ...(!options.emitToSelf ? { socketId: this.client.socketManager.socket.id } : {}),
     });
-    return new Message(rawMessage);
+    return new Message(this.client, rawMessage);
     
   }
   async getMessages() {
     const rawMessages = await fetchMessages(this.client, this._id);
-    return rawMessages.map(rawMessage => new Message(rawMessage));
+    return rawMessages.map(rawMessage => new Message(this.client, rawMessage));
   }
 }
 

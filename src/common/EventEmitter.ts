@@ -4,6 +4,7 @@ import { Message } from './Message';
 
 export interface ClientEvents {
   'messageCreated': (message: Message) => void;
+  'messageDeleted': (data: {channelId: string, messageId: string}) => void;
 }
 
 

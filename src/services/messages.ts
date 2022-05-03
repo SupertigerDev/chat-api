@@ -45,3 +45,17 @@ export const postMessage = async (client: Client, opts: PostMessageOpts) => {
   });
   return data;
 };
+
+interface DeleteMessageOpts {
+  channelId: string;
+  messageId: string;
+}
+
+export const deleteMessage = async (client: Client, opts: DeleteMessageOpts) => {
+  const data = await request<{message: string}>({
+    method: 'DELETE',
+    url: Endpoints.messageEndpoint(opts.channelId, opts.messageId),
+    token: client.token,
+  });
+  return data;
+};

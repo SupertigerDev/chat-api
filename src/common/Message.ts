@@ -1,4 +1,6 @@
 import { makeAutoObservable } from 'mobx';
+import { deleteMessage } from '../services/messages';
+import { Client } from './Client';
 
 
 export enum MessageType {
@@ -25,6 +27,7 @@ interface MessageData {
 }
 
 export class Message {
+  client: Client;
   _id: string;
   channel: string;
   content?: string;
@@ -38,14 +41,21 @@ export class Message {
   };
   editedAt?: number;
 
-  constructor(data: MessageData) {
+  constructor(client: Client, data: MessageData) {
     this._id = data._id;
-    makeAutoObservable(this, {_id: false});
+    this.client = client;
+    makeAutoObservable(this, {_id: false, client: false});
     this.channel = data.channel;
     this.content = data.content;
     this.type = data.type;
     this.createdAt = data.createdAt;
     this.editedAt = data.editedAt;
     this.createdBy = data.createdBy;
+  }
+  delete() {
+    return deleteMessage(this.client, {
+      channelId: this.channel,
+      messageId: this._id,
+    });
   }
 }
