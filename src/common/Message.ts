@@ -38,9 +38,6 @@ export class Message {
   };
   editedAt?: number;
 
-  // only used for the frontend client.
-  tempId?: string;
-
   constructor(data: MessageData) {
     this._id = data._id;
     makeAutoObservable(this, {_id: false});
@@ -51,7 +48,4 @@ export class Message {
     this.editedAt = data.editedAt;
     this.createdBy = data.createdBy;
   }
-
-  
-
 }
