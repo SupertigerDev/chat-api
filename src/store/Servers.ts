@@ -44,6 +44,7 @@ export class Servers {
   addServer(data: ServerData) {
     const server = new Server(this.client, data);
     this.cache[server._id] = server;
+    return server;
   }
 
   constructor(client: Client) {
