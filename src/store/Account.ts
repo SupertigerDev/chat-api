@@ -11,6 +11,6 @@ export class Account {
   constructor(client: Client) {
     this.client = client;
     this.user = null;
-    makeAutoObservable(this, { client: false, user: false });
+    makeAutoObservable(this, { client: false });
   }
 }
