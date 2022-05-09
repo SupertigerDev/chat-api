@@ -6,3 +6,12 @@ export interface RawServer {
   createdBy: string;
   createdAt: number;
 }
+
+export interface RawUser {
+  _id: string;
+  avatar?: string;
+  username: string;
+  hexColor: string;
+  tag: string;
+  joinedAt: number;
+}

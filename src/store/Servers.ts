@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { Client } from '../common/Client';
+import { ServerMembers } from './ServerMembers';
 
 
 interface ServerData {
@@ -13,6 +14,8 @@ export class Server {
 
   client: Client;
 
+  serverMembers: ServerMembers;
+
   _id: string;
 
   name: string;
@@ -24,7 +27,8 @@ export class Server {
   constructor(client: Client, data: ServerData) {
     this.client = client;
     this._id = data._id;
-    makeAutoObservable(this, {_id: false, client: false});
+    this.serverMembers = new ServerMembers(client);
+    makeAutoObservable(this, {_id: false, client: false, serverMembers: false});
     this.name = data.name;
     this.hexColor = data.hexColor;
     this.defaultChannel = data.defaultChannel;

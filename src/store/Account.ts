@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { Client } from '../common/Client';
-import { User } from './User';
+import { User } from './Users';
 
 export class Account {
 
@@ -12,5 +12,8 @@ export class Account {
     this.client = client;
     this.user = null;
     makeAutoObservable(this, { client: false });
+  }
+  setUser(user: User) {
+    this.user = user;
   }
 }

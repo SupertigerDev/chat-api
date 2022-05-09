@@ -5,6 +5,7 @@ import {CustomEventEmitter} from '../common/EventEmitter';
 import { Message } from './Message';
 import { ClientEvents } from './EventEmitter';
 import { Account } from '../store/Account';
+import { Users } from '../store/Users';
 
 
 
@@ -19,6 +20,8 @@ export class Client {
 
   servers: Servers;
 
+  users: Users;
+
   channels: Channels;
 
   eventEmitter:  CustomEventEmitter;
@@ -28,6 +31,7 @@ export class Client {
     this.socketManager = new SocketManager(this);
 
     this.account = new Account(this);
+    this.users = new Users(this);
     this.servers = new Servers(this);
     this.channels = new Channels(this);
 
