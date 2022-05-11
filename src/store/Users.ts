@@ -38,17 +38,20 @@ export class User {
 
   constructor(client: Client, userData: UserData) {
     this.client = client;
+    this.presence = { status: UserStatus.OFFLINE };
     makeAutoObservable(this, { client: false });
     
     this._id = userData._id;
     this.username = userData.username;
     this.tag = userData.tag;
     this.hexColor = userData.hexColor;
-    this.presence = { status: UserStatus.OFFLINE };
   }
   setPresence(presence: Presence, locally = false) {
     if (locally) {
       this.presence = presence;
+      if (presence.status === UserStatus.OFFLINE) {
+        delete presence.custom;
+      }
     }
   }
 }

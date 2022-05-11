@@ -1,10 +1,10 @@
-import { RawServer, RawUser } from '../../types/RawData';
+import { RawChannel, RawServer, RawServerMember } from '../../types/RawData';
 
 export interface AuthenticatedPayload {
   user: SelfUser;
   servers: RawServer[];
-  serverMembers: ServerMember[];
-  channels: Channel[];
+  serverMembers: RawServerMember[];
+  channels: RawChannel[];
   presences: Presence[];
 }
 
@@ -20,20 +20,4 @@ interface SelfUser {
   hexColor: string;
   avatar?: string;
   tag: string;
-}
-
-
-interface ServerMember {
-  server: string;
-  user: RawUser;
-  joinedAt: number;
-}
-
-interface Channel {
-  name: string
-  _id: string;
-  createdBy: string;
-  server?: string;
-  type: number;
-  createdAt: number
 }

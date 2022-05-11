@@ -1,9 +1,10 @@
 import { Client } from '../common/Client';
 import {io, Socket} from 'socket.io-client';
-import { CONNECT, MESSAGE_CREATED, MESSAGE_DELETED, SERVER_JOINED, USER_AUTHENTICATED } from './ServerEventNames';
+import { CONNECT, MESSAGE_CREATED, MESSAGE_DELETED, SERVER_JOINED, USER_AUTHENTICATED, USER_PRESENCE_UPDATE } from './ServerEventNames';
 import { onAuthenticated, onConnect } from './events/connectionEvents';
 import { onMessageCreated, onMessageDeleted } from './events/messageEvents';
 import { onServerJoined } from './events/serverEvents';
+import { onPresenceChanged } from './events/userEvents';
 
 export class SocketManager {
   socket: Socket;
@@ -12,7 +13,8 @@ export class SocketManager {
     this.socket.on(CONNECT, () => onConnect(client, this.socket));
     this.socket.on(USER_AUTHENTICATED, payload => onAuthenticated(client, payload));
 
-    
+    this.socket.on(USER_PRESENCE_UPDATE, payload => onPresenceChanged(client, payload));
+
     this.socket.on(SERVER_JOINED, payload => onServerJoined(client, payload));
 
     this.socket.on(MESSAGE_CREATED, payload => onMessageCreated(client, payload));

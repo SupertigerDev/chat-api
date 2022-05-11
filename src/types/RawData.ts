@@ -13,5 +13,20 @@ export interface RawUser {
   username: string;
   hexColor: string;
   tag: string;
+  joinedAt?: number;
+}
+
+export interface RawServerMember {
+  server: string;
+  user: RawUser;
   joinedAt: number;
+}
+
+export interface RawChannel {
+  name: string
+  _id: string;
+  createdBy: string;
+  server?: string;
+  type: number;
+  createdAt: number
 }
