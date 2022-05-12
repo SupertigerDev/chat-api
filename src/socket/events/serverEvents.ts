@@ -1,10 +1,9 @@
 import { Client } from '../../common/Client';
-import { ServerMember } from '../../store/ServerMembers';
-import { RawChannel, RawServer } from '../../types/RawData';
+import { RawChannel, RawServer, RawServerMember } from '../../types/RawData';
 
 interface ServerJoinedPayload {
   server: RawServer,
-  members: ServerMember[],
+  members: RawServerMember[],
   channels: RawChannel[],
 }
 
@@ -26,6 +25,15 @@ export function onServerJoined(client: Client, payload: ServerJoinedPayload) {
   client.eventEmitter.emitEvent('serverJoined', server);
 }
 
-export function onServerMemberJoined () {
-  //
+
+interface ServerMemberJoinedPayload {
+  serverId: string;
+  member: RawServerMember;
+}
+
+
+export function onServerMemberJoined (client: Client, payload: ServerMemberJoinedPayload) {
+  client.users.addUser(payload.member.user);
+  const server = client.servers.cache[payload.serverId];
+  server.serverMembers.addMember(payload.member);
 }
