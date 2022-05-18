@@ -1,10 +1,11 @@
 import { Client } from '../common/Client';
 import {io, Socket} from 'socket.io-client';
-import { CONNECT, MESSAGE_CREATED, MESSAGE_DELETED, SERVER_JOINED, SERVER_MEMBER_JOINED, USER_AUTHENTICATED, USER_PRESENCE_UPDATE } from './ServerEventNames';
+import { CONNECT, FRIEND_REQUEST_PENDING, FRIEND_REQUEST_SENT, MESSAGE_CREATED, MESSAGE_DELETED, SERVER_JOINED, SERVER_MEMBER_JOINED, USER_AUTHENTICATED, USER_PRESENCE_UPDATE } from './ServerEventNames';
 import { onAuthenticated, onConnect } from './events/connectionEvents';
 import { onMessageCreated, onMessageDeleted } from './events/messageEvents';
 import { onServerJoined, onServerMemberJoined } from './events/serverEvents';
 import { onPresenceChanged } from './events/userEvents';
+import { onFriendRequestPending, onFriendRequestSent } from './events/friendEvents';
 
 export class SocketManager {
   socket: Socket;
@@ -14,6 +15,10 @@ export class SocketManager {
     this.socket.on(USER_AUTHENTICATED, payload => onAuthenticated(client, payload));
 
     this.socket.on(USER_PRESENCE_UPDATE, payload => onPresenceChanged(client, payload));
+
+    this.socket.on(FRIEND_REQUEST_SENT, payload => onFriendRequestSent(client, payload));
+    this.socket.on(FRIEND_REQUEST_PENDING, payload => onFriendRequestPending(client, payload));
+
 
     this.socket.on(SERVER_JOINED, payload => onServerJoined(client, payload));
     this.socket.on(SERVER_MEMBER_JOINED, payload => onServerMemberJoined(client, payload));

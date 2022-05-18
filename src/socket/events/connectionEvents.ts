@@ -1,6 +1,5 @@
 import { Socket } from 'socket.io-client';
 import { Client } from '../../common/Client';
-import { Message } from '../../common/Message';
 import { User } from '../../store/Users';
 import { AUTHENTICATE } from '../ClientEventNames';
 import { AuthenticatedPayload } from './connectionEventTypes';
@@ -30,11 +29,19 @@ export function onAuthenticated(client: Client, payload: AuthenticatedPayload) {
     server?.serverMembers.addMember(serverMember);
   }
 
+  for (let i = 0; i < payload.friends.length; i++) {
+    const friend = payload.friends[i];
+    client.users.addUser(friend.recipient);
+    client.friends.addFriend(friend);
+  }
+
   for (let i = 0; i < payload.presences.length; i++) {
     const presence = payload.presences[i];
     const user = client.users.cache[presence.userId];
     user?.setPresence(presence, true);    
   }
+
+
 
   client.account.setUser(new User(client, payload.user));
 }

@@ -2,10 +2,10 @@ import { SocketManager } from '../socket/SocketManager';
 import { Channels } from '../store/Channels';
 import { Servers } from '../store/Servers';
 import {CustomEventEmitter} from '../common/EventEmitter';
-import { Message } from './Message';
 import { ClientEvents } from './EventEmitter';
 import { Account } from '../store/Account';
 import { Users } from '../store/Users';
+import { Friends } from '../store/Friends';
 
 
 
@@ -21,7 +21,7 @@ export class Client {
   servers: Servers;
 
   users: Users;
-
+  friends: Friends;
   channels: Channels;
 
   eventEmitter:  CustomEventEmitter;
@@ -32,6 +32,7 @@ export class Client {
 
     this.account = new Account(this);
     this.users = new Users(this);
+    this.friends = new Friends(this);
     this.servers = new Servers(this);
     this.channels = new Channels(this);
 

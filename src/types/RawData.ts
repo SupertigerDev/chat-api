@@ -30,3 +30,10 @@ export interface RawChannel {
   type: number;
   createdAt: number
 }
+
+export interface RawFriend {
+  status: number,
+  createdAt: number
+  user: string;
+  recipient: RawUser;
+}
