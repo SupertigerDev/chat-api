@@ -35,7 +35,7 @@ export class Server {
   }
 
   get channels() {
-    return this.client.channels.array.filter(channel => channel.server === this._id);
+    return this.client.channels.array.filter(channel => channel.server._id === this._id);
   }
 }
 

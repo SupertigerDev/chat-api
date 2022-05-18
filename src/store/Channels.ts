@@ -33,7 +33,7 @@ export class ServerChannel {
 
   name: string;
 
-  server: string;
+  serverId: string;
 
   constructor(client: Client, data: ChannelData) {
     if (!data.server) throw new Error('ServerChannel must have a server.');
@@ -42,7 +42,7 @@ export class ServerChannel {
     makeAutoObservable(this, {_id: false, client: false});
     this.name = data.name;
     this.type = data.type;
-    this.server = data.server;
+    this.serverId = data.server;
   }
   async sendMessage(content: string, opts?: SendMessageOpts) {
     const options = { ...defaultSendMessageOpts, ...opts };
@@ -57,6 +57,9 @@ export class ServerChannel {
   async getMessages() {
     const rawMessages = await fetchMessages(this.client, this._id);
     return rawMessages.map(rawMessage => new Message(this.client, rawMessage));
+  }
+  get server() {
+    return this.client.servers.cache[this.serverId];
   }
 }
 
