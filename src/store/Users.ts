@@ -9,7 +9,7 @@ interface UserData {
   hexColor: string;
 }
 
-enum UserStatus {
+export enum UserStatus {
   OFFLINE = 0,
   ONLINE = 1,
   LTP = 2, // Looking To Play
