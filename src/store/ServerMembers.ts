@@ -29,7 +29,7 @@ export class ServerMembers {
 
   cache: Record<string, ServerMember> = {};
 
-  addMember(data: ServerMemberData) {
+  _addMember(data: ServerMemberData) {
     const member = new ServerMember(this.client, data);
     this.cache[data.user._id] = member;
     return member;

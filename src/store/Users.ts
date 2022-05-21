@@ -63,7 +63,7 @@ export class Users {
 
   cache: Record<string, User> = {};
 
-  addUser(data: UserData) {
+  _addUser(data: UserData) {
     const user = new User(this.client, data);
     this.cache[data._id] = user;
     return user;

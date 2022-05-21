@@ -14,25 +14,25 @@ export function onAuthenticated(client: Client, payload: AuthenticatedPayload) {
 
   for (let i = 0; i < payload.servers.length; i++) {
     const server = payload.servers[i];
-    client.servers.addServer(server);
+    client.servers._addServer(server);
   }
 
   for (let i = 0; i < payload.channels.length; i++) {
     const channel = payload.channels[i];
-    client.channels.addChannel(channel);
+    client.channels._addChannel(channel);
   }  
 
   for (let i = 0; i < payload.serverMembers.length; i++) {
     const serverMember = payload.serverMembers[i];
-    client.users.addUser(serverMember.user);
+    client.users._addUser(serverMember.user);
     const server = client.servers.cache[serverMember.server];
-    server?.serverMembers.addMember(serverMember);
+    server?.serverMembers._addMember(serverMember);
   }
 
   for (let i = 0; i < payload.friends.length; i++) {
     const friend = payload.friends[i];
-    client.users.addUser(friend.recipient);
-    client.friends.addFriend(friend);
+    client.users._addUser(friend.recipient);
+    client.friends._addFriend(friend);
   }
 
   for (let i = 0; i < payload.presences.length; i++) {

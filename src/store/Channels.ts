@@ -70,7 +70,7 @@ export class Channels {
 
   cache: Record<string, ServerChannel> = {};
 
-  addChannel(data: ChannelData) {
+  _addChannel(data: ChannelData) {
     if (data.type === ChannelType.SERVER_TEXT) {
       const channel = new ServerChannel(this.client, data);
       this.cache[channel._id] = channel;

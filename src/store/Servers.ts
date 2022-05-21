@@ -45,7 +45,7 @@ export class Servers {
 
   cache: Record<string, Server> = {};
 
-  addServer(data: ServerData) {
+  _addServer(data: ServerData) {
     const server = new Server(this.client, data);
     this.cache[server._id] = server;
     return server;
