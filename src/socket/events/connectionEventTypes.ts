@@ -1,4 +1,4 @@
-import { RawChannel, RawFriend, RawServer, RawServerMember } from '../../types/RawData';
+import { RawChannel, RawFriend, RawInboxWithoutChannel, RawServer, RawServerMember } from '../../types/RawData';
 
 export interface AuthenticatedPayload {
   user: SelfUser;
@@ -7,6 +7,7 @@ export interface AuthenticatedPayload {
   channels: RawChannel[];
   presences: Presence[];
   friends: RawFriend[];
+  inbox: RawInboxWithoutChannel[];
 }
 
 

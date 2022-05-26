@@ -6,6 +6,7 @@ import { ClientEvents } from './EventEmitter';
 import { Account } from '../store/Account';
 import { Users } from '../store/Users';
 import { Friends } from '../store/Friends';
+import { Inbox } from '../store/Inbox';
 
 
 
@@ -23,6 +24,7 @@ export class Client {
   users: Users;
   friends: Friends;
   channels: Channels;
+  inbox: Inbox;
 
   eventEmitter:  CustomEventEmitter;
   
@@ -35,6 +37,7 @@ export class Client {
     this.friends = new Friends(this);
     this.servers = new Servers(this);
     this.channels = new Channels(this);
+    this.inbox = new Inbox(this);
 
     this.eventEmitter = new CustomEventEmitter();
   }

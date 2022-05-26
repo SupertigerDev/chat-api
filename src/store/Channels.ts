@@ -2,6 +2,9 @@ import { makeAutoObservable } from 'mobx';
 import { Client } from '../common/Client';
 import { Message } from '../common/Message';
 import { fetchMessages, postMessage } from '../services/messages';
+import { RawUser } from '../types/RawData';
+import { Server } from './Servers';
+import { User } from './Users';
 
 export enum ChannelType {
   DM_TEXT = 0,
@@ -14,6 +17,7 @@ interface ChannelData {
   _id: string;
   server?: string;
   type: number;
+  recipients?: RawUser[];
 }
 
 interface SendMessageOpts {
@@ -24,7 +28,7 @@ const defaultSendMessageOpts: SendMessageOpts = {
 };
 
 
-export class ServerChannel {
+export class Channel {
   client: Client;
 
   _id: string;
@@ -33,16 +37,27 @@ export class ServerChannel {
 
   name: string;
 
-  serverId: string;
+  serverId?: string;
+  recipientIds?: string[];
 
   constructor(client: Client, data: ChannelData) {
-    if (!data.server) throw new Error('ServerChannel must have a server.');
     this._id = data._id;
     this.client = client;
     makeAutoObservable(this, {_id: false, client: false});
     this.name = data.name;
     this.type = data.type;
     this.serverId = data.server;
+
+    if (this.type === ChannelType.DM_TEXT && data.recipients) {
+      this.recipientIds = [];
+      for (let i = 0; i < data.recipients.length; i++) {
+        const user = data.recipients[i];
+        if (user._id === client.account.user?._id) continue;
+        const newUser = client.users._addUser(user);
+        newUser._setInboxChannelId(this._id);
+        this.recipientIds.push(user._id);
+      }
+    }
   }
   async sendMessage(content: string, opts?: SendMessageOpts) {
     const options = { ...defaultSendMessageOpts, ...opts };
@@ -58,8 +73,13 @@ export class ServerChannel {
     const rawMessages = await fetchMessages(this.client, this._id);
     return rawMessages.map(rawMessage => new Message(this.client, rawMessage));
   }
-  get server() {
+  get server(): Server | null {
+    if (!this.serverId) return null;
     return this.client.servers.cache[this.serverId];
+  }
+  get recipient(): User | null {
+    if (!this.recipientIds) return null;
+    return this.client.users.cache[this.recipientIds[0]];
   }
 }
 
@@ -68,13 +88,11 @@ export class Channels {
 
   client: Client;
 
-  cache: Record<string, ServerChannel> = {};
+  cache: Record<string, Channel> = {};
 
   _addChannel(data: ChannelData) {
-    if (data.type === ChannelType.SERVER_TEXT) {
-      const channel = new ServerChannel(this.client, data);
-      this.cache[channel._id] = channel;
-    }
+    const channel = new Channel(this.client, data);
+    this.cache[channel._id] = channel;
   }
 
   constructor(client: Client) {

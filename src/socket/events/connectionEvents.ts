@@ -12,6 +12,8 @@ export function onConnect(client: Client, socket: Socket) {
 export function onAuthenticated(client: Client, payload: AuthenticatedPayload) {
   console.log('[WS] Authenticated.');
 
+  client.account.setUser(new User(client, payload.user));
+  
   for (let i = 0; i < payload.servers.length; i++) {
     const server = payload.servers[i];
     client.servers._addServer(server);
@@ -21,6 +23,11 @@ export function onAuthenticated(client: Client, payload: AuthenticatedPayload) {
     const channel = payload.channels[i];
     client.channels._addChannel(channel);
   }  
+
+  for (let i = 0; i < payload.inbox.length; i++) {
+    const inboxItem = payload.inbox[i];
+    client.inbox.add(inboxItem);
+  }
 
   for (let i = 0; i < payload.serverMembers.length; i++) {
     const serverMember = payload.serverMembers[i];
@@ -43,5 +50,5 @@ export function onAuthenticated(client: Client, payload: AuthenticatedPayload) {
 
 
 
-  client.account.setUser(new User(client, payload.user));
+
 }

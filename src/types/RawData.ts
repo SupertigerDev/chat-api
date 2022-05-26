@@ -29,6 +29,7 @@ export interface RawChannel {
   server?: string;
   type: number;
   createdAt: number
+  recipients?: RawUser[];
 }
 
 export interface RawFriend {
@@ -36,4 +37,11 @@ export interface RawFriend {
   createdAt: number
   user: string;
   recipient: RawUser;
+}
+export interface RawInboxWithoutChannel {
+  _id: string;
+  createdAt: number;
+  user: string;
+  channel: string;
+  closed: boolean
 }

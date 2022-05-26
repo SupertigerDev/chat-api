@@ -7,6 +7,7 @@ export const FRIEND_REQUEST_SENT = 'friend:request_sent';
 export const FRIEND_REQUEST_PENDING = 'friend:request_pending';
 export const FRIEND_REQUEST_ACCEPTED = 'friend:request_accepted';
 export const FRIEND_REMOVED = 'friend:removed';
+export const INBOX_OPENED = 'inbox:opened';
 
 export const SERVER_JOINED = 'server:joined';
 export const SERVER_MEMBER_JOINED = 'server:member_joined';
